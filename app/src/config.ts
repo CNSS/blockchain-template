@@ -1,21 +1,21 @@
 import * as yaml from 'js-yaml';
+import { EtherUnits } from 'web3-utils';
 import { readFileSync } from 'fs';
+
+interface Amount {
+    amount: string;
+    unit: EtherUnits;
+}
 
 interface FaucetConfig {
     enabled: boolean;
     amount: string;
     unit: string;
-    limit: {
-        amount: string;
-        unit: string;
-    }
+    limit: Amount;
 }
 
 interface DeployerConfig {
-    balance: {
-        amount: string;
-        unit: string;
-    }
+    balance: Amount;
 }
 
 interface ContractConfig {
@@ -24,13 +24,13 @@ interface ContractConfig {
     name: string;
     constructor: {
         args: any[];
-        value: string;
+        value: Amount;
         gas: string;
     };
     checks: {
         func: string;
         args: any[];
-        value: string;
+        value: Amount;
         gas: string;
         check: boolean;
     }[];
