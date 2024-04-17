@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { challenge, deployer } from "./deploy.js";
-import { readFileSync } from "fs";
+import { execFileSync } from 'child_process';
 import { config } from "./config.js";
 
 export const flagHandler = async (req: Request, res: Response) => {
@@ -44,7 +44,7 @@ export const flagHandler = async (req: Request, res: Response) => {
     }else{
         res.render('flag', { 
             faucetEnabled: config.faucet.enabled,
-            flag: `Wow, how do you achieve that. Here's you flag: ${readFileSync('/flag', 'utf-8')}`
+            flag: `Wow, how do you achieve that? Here's your flag: ${execFileSync('/readflag').toString()}`
         });
     }
 }
