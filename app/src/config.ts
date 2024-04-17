@@ -10,7 +10,7 @@ interface Amount {
 interface FaucetConfig {
     enabled: boolean;
     amount: string;
-    unit: string;
+    unit: EtherUnits;
     limit: Amount;
 }
 

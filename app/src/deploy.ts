@@ -26,6 +26,12 @@ let challenge = {
 
 let deployer: Web3Account;
 
+// remove stupid solc unhandledRejection listener, fxxk u. https://github.com/ethereum/solidity/issues/12228
+const listeners = process.listeners('unhandledRejection')
+if(listeners.length > 0 && listeners[listeners.length - 1].name === 'abort'){
+    process.removeListener('unhandledRejection', listeners[listeners.length - 1])
+}
+
 const findImport = (_path: string): any => {
     const filename = path.join('contracts/', _path);
     if (!fs.existsSync(filename)) {
