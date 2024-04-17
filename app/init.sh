@@ -10,6 +10,10 @@ yarn build
 node dist/init.js
 
 adduser --disabled-password --no-create-home --gecos "" --shell /bin/sh geth
-adduser --disabled-password --no-create-home --gecos "" --shell /bin/sh proxy
+adduser --disabled-password --no-create-home --gecos "" --shell /bin/sh app
 
+chown -R geth:geth /geth
+chown -R app:app /app
+
+chmod 4755 /readflag
 chmod -R 700 /app /geth
