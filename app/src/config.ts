@@ -40,12 +40,25 @@ interface ContractConfig {
     show_filename: boolean;
 }
 
+interface GenesisConfig {
+    chain_id: number;
+    timestamp: string;
+    gas_limit: string;
+    difficulty: string;
+}
+
+interface SolcConfig {
+    version: string
+}
+
 interface Config {
     description: string;
     wrong_flag_message: string;
     faucet: FaucetConfig;
     deployer: DeployerConfig;
     contracts: ContractConfig[];
+    solc: SolcConfig;
+    genesis: GenesisConfig;
 };
 
 let config: Config;
