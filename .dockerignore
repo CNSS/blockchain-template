@@ -9,5 +9,6 @@
 Dockerfile
 docker-compose.yml
 
+*.example
 app/node_modules/*
 app/dist/*

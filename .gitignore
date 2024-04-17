@@ -2,5 +2,6 @@
 app/node_modules/*
 app/dist/*
 app/contracts/*
+!app/contracts/.gitkeep
 
 config.yml

@@ -2,16 +2,17 @@ import { Web3Account } from 'web3-eth-accounts';
 import { Contract, Web3 } from 'web3';
 import solc from 'solc';
 import * as fs from "fs";
-import * as yaml from 'js-yaml';
 import { exit } from 'process';
 import { fundAccount } from './faucet.js';
 import path from 'path';
 import { EtherUnits } from 'web3-utils';
 import { web3 } from './web3.js';
 import { ContractConfig, config } from './config.js';
+import { createHash, randomBytes } from 'crypto';
 
 interface ChallengeContract {
     deploy_contract: Contract<any>;
+    hash: string;
     config: ContractConfig;
 }
 
@@ -25,7 +26,7 @@ let challenge = {
 
 let deployer: Web3Account;
 
-function compileContract(sourceCode: string, contractName: string): { abi: any, bytecode: string } {
+const compileContract = (sourceCode: string, contractName: string): { abi: any, bytecode: string } => {
     const input = {
         language: "Solidity",
         sources: {
@@ -53,7 +54,7 @@ function compileContract(sourceCode: string, contractName: string): { abi: any, 
     };
 }
 
-async function deployContract(web3: Web3, abi: any, bytecode: string, value: string, args: any[], gas: string): Promise<Contract<any>> {
+const deployContract = async (web3: Web3, abi: any, bytecode: string, value: string, args: any[], gas: string): Promise<Contract<any>> => {
     let contract = new web3.eth.Contract(abi);
 
     let tx = contract.deploy({ data: bytecode, arguments: args })
@@ -93,8 +94,10 @@ const deployChallenge = async () => {
             case 'source': {
                 const { abi, bytecode } = compileContract(data, contract.name);
                 const deploy_contract = await deployContract(web3, abi, bytecode, constructor.value, constructor.args, constructor.gas);
+                const hash = createHash('sha1').update(bytecode).update(randomBytes(32)).digest('hex');
                 let challengeContract = {
                     deploy_contract: deploy_contract,
+                    hash: hash,
                     config: structuredClone(contract)
                 };
                 challenge.contracts.push(challengeContract);

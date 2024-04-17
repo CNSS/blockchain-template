@@ -45,7 +45,7 @@ enum JSONRPCErrorCode {
 }
 
 
-function createErrorResponse(code: Number, message: String, id: Number | null) {
+const createErrorResponse = (code: Number, message: String, id: Number | null) => {
     return {
         jsonrpc: "2.0",
         error: {
@@ -56,7 +56,7 @@ function createErrorResponse(code: Number, message: String, id: Number | null) {
     };
 }
 
-function proxy(body: JSONRPCBody, res: Response) {
+const proxy = (body: JSONRPCBody, res: Response) => {
     let providerUrl = env.PROVIDER_URL ?? "http://127.0.0.1:58545/";
 
     fetch(providerUrl, {

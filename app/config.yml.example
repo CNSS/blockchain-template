@@ -4,7 +4,7 @@ description: |
 wrong_flag_message: Are you sure? Here' s nothing named flag ...
 
 faucet:
-  enabled: False
+  enabled: True
   amount: 10
   unit: ether
   limit:
@@ -31,6 +31,6 @@ contracts:
         # gas: "0"
         check: True
     visible: True
+    show_file: True
     show_address: True
     show_filename: True
-

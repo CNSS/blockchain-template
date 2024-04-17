@@ -35,6 +35,7 @@ interface ContractConfig {
         check: boolean;
     }[];
     visible: boolean;
+    show_file: boolean;
     show_address: boolean;
     show_filename: boolean;
 }

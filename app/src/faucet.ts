@@ -3,6 +3,7 @@ import { Web3 } from 'web3';
 import { EtherUnits } from 'web3-utils';
 import { web3 } from './web3.js';
 import { config } from './config.js';
+import exp from 'constants';
 
 interface FundRecord {
     [address: string]: {
@@ -12,7 +13,7 @@ interface FundRecord {
 
 let fundRecords: FundRecord = {};
 
-export const fundAccount = async (web3: Web3, account: string, amount: string): Promise<boolean> => {
+const fundAccount = async (web3: Web3, account: string, amount: string): Promise<boolean> => {
     try {
         let result = await web3.eth.sendTransaction({
             from: web3.defaultAccount,
@@ -31,7 +32,7 @@ export const fundAccount = async (web3: Web3, account: string, amount: string): 
     }
 };
 
-export const faucetHandler = async (req: Request, res: Response) => {
+const faucetFundHandler = async (req: Request, res: Response) => {
     if (!config.faucet.enabled) {
         res.status(400).json({ status: 'error', message: 'Faucet is disabled' });
         return;
@@ -72,3 +73,19 @@ export const faucetHandler = async (req: Request, res: Response) => {
 
     res.json({ status: 'ok', message: 'Successfully funded your account' });
 }
+
+const faucetViewHandler = async (req: Request, res: Response) => {
+    res.render('faucet', {
+        faucet: {
+            enabled: config.faucet.enabled,
+            amount: config.faucet.amount,
+            unit: config.faucet.unit,
+            limit: {
+                amount: config.faucet.limit.amount,
+                unit: config.faucet.limit.unit
+            }
+        }
+    });
+}
+
+export {fundAccount, faucetFundHandler, faucetViewHandler};

@@ -54,7 +54,12 @@
 
                         <div class="nes-field" style="text-align: left;">
                             <label for="contract-filename-<%= i %>">Filename</label>
-                            <input type="text" id="contract-filename-<%= i %>" class="nes-input" value="<%= contract.filename %>" readonly>
+                            <div class="nes-field is-inline" id="contract-filename-<%= i %>">
+                                <input type="text" id="contract-filename-input-<%= i %>" class="nes-input" value="<%= contract.filename %>" readonly>
+                                <% if(contract.showFile) { %>
+                                <button class="nes-btn is-primary inline-copy-btn-right" onclick="window.open('/download?hash=<%= contract.hash %>', '_blank')">Download</button>
+                                <% } %>
+                            </div>
                         </div>
 
                         <br>

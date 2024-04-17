@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: UNLICENSED
+
+pragma solidity ^0.8.13;
+
+contract Challenge {    
+    bool private done;
+    bool private isCalling;
+
+    
+    constructor() payable {
+
+    }
+
+    function callback() public { 
+        isCalling = true;
+        (bool r, ) = msg.sender.call('');
+        
+        require(r, "Failed?");
+        isCalling = false;
+    }
+
+    function vivo50() public {
+        require(msg.sender.code.length == 0, "EOA only");
+        require(isCalling, "Hacker");
+
+        done = true;
+    }
+
+    function check() public view returns (bool) {
+        return done;
+    }
+}
