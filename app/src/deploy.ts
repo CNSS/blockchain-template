@@ -26,6 +26,14 @@ let challenge = {
 
 let deployer: Web3Account;
 
+const findImport = (_path: string): any => {
+    const filename = path.join('contracts/', _path);
+    if (!fs.existsSync(filename)) {
+        return { error: 'File not found' };
+    }
+    return { contents: fs.readFileSync(filename, 'utf8') };
+}
+
 const compileContract = (sourceCode: string, contractName: string): { abi: any, bytecode: string } => {
     const input = {
         language: "Solidity",
@@ -45,7 +53,7 @@ const compileContract = (sourceCode: string, contractName: string): { abi: any, 
         },
     };
 
-    const output = solc.compile(JSON.stringify(input));
+    const output = solc.compile(JSON.stringify(input), { import: findImport });
     const artifact = JSON.parse(output).contracts.main[contractName];
 
     return {
@@ -114,10 +122,10 @@ const deployChallenge = async () => {
     }, Promise.resolve());
 };
 
-export { 
-    ChallengeContract, 
-    Challenge, 
-    challenge, 
-    deployer, 
-    deployChallenge 
+export {
+    ChallengeContract,
+    Challenge,
+    challenge,
+    deployer,
+    deployChallenge
 };
