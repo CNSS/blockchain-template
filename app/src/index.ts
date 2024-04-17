@@ -75,7 +75,7 @@ app.use(function (_, res: Response) {
     process.on('uncaughtException', function(err) { 
         console.log(err);
         res.status(500).send('Internal Server Error');
-    }) 
+    });
 });
 
 app.listen(port, () => {
