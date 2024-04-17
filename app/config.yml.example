@@ -22,7 +22,20 @@ contracts:
     name: Challenge
     constructor:
       args: []
-      value: "1000000000"
+      value: "1000000000000000000"
+      # gas: "0"
+    checks: []
+    visible: True
+    show_file: True
+    show_address: True
+    show_filename: True
+
+  - type: source
+    filename: chall.sol
+    name: Prover
+    constructor:
+      args: []
+      value: "0"
       # gas: "0"
     checks:
       - func: check
@@ -37,6 +50,7 @@ contracts:
 
 solc:
   version: "0.7.6"
+  evm_version: "istanbul"
 
 genesis:
   chain_id: 1337

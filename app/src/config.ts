@@ -49,6 +49,7 @@ interface GenesisConfig {
 
 interface SolcConfig {
     version: string
+    evm_version: string
 }
 
 interface Config {

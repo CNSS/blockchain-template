@@ -49,7 +49,7 @@ const compileContract = (sourceCode: string, contractName: string): { abi: any, 
                     "*": ["abi", "evm.bytecode"]
                 }
             },
-            evmVersion: "paris"
+            evmVersion: config.solc.evm_version
         },
     };
 
