@@ -1,32 +1,53 @@
 // SPDX-License-Identifier: UNLICENSED
 
-pragma solidity ^0.8.13;
+pragma solidity ^0.7.6;
 
-contract Challenge {    
-    bool private done;
-    bool private isCalling;
+contract Challenge {
+    mapping(address => uint256) public savings;
+
+    constructor() payable {}
+
+    function deposit() public payable {
+        require(msg.value > 1 gwei, "You are not welcomed!!");
+        savings[msg.sender] += msg.value;
+    }
+
+    function withdraw(uint256 amount) public {
+        require(savings[msg.sender] >= amount, "Poor MAN!");
+        require(address(this).balance >= amount, "Ouch, my money is stolen qwq");
+        
+        (bool suc, ) = msg.sender.call{value: amount}('');
+        require(suc, "Why you don't receive my money??");
+        savings[msg.sender] -= amount;
+    }
 
     
-    constructor() payable {
-
-    }
-
-    function callback() public { 
-        isCalling = true;
-        (bool r, ) = msg.sender.call('');
+    function withdrawEx(uint256 amount) public {
+        require(savings[msg.sender] >= amount, "Poor MAN!");
+        require(address(this).balance >= amount, "Ouch, my money is stolen qwq");
         
-        require(r, "Failed?");
-        isCalling = false;
+        savings[msg.sender] -= amount;
+        payable(msg.sender).transfer(amount);
     }
 
-    function vivo50() public {
-        require(msg.sender.code.length == 0, "EOA only");
-        require(isCalling, "Hacker");
+    receive() external payable {
+        revert();
+    }
+}
 
+contract Prover {
+    bool private done;
+
+    function sendFlag() public payable {
+        require(msg.value > 2000 ether, "Poor MAN!");
         done = true;
     }
 
     function check() public view returns (bool) {
         return done;
+    }
+
+    receive() external payable {
+        revert();
     }
 }

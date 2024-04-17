@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { challenge, deployer } from "./deploy.js";
 import { execFileSync } from 'child_process';
 import { config } from "./config.js";
+import { web3 } from "./web3.js";
 
 export const flagHandler = async (req: Request, res: Response) => {
     let flag = true;
@@ -10,15 +11,15 @@ export const flagHandler = async (req: Request, res: Response) => {
             for(const check of contract.config.checks) {
                 let deploy_contract = contract.deploy_contract;
                 let tx = deploy_contract.methods[check.func](...check.args)
-                
+                const value = web3.utils.toWei(check.value.amount, check.value.unit);
                 let gas = check.gas;
                 if (!gas) {
-                    gas = (await tx.estimateGas({from: deployer.address, value: check.value})).toString();
+                    gas = (await tx.estimateGas({from: deployer.address, value: value})).toString();
                 }
                 
                 let result = await tx.call({
                     from: deployer.address,
-                    value: check.value,
+                    value: value,
                     gas: gas
                 }) as boolean;
     

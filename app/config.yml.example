@@ -5,15 +5,15 @@ wrong_flag_message: Are you sure? Here' s nothing named flag ...
 
 faucet:
   enabled: True
-  amount: 10
+  amount: 20
   unit: ether
   limit:
-    amount: 100
+    amount: 40
     unit: ether
 
 deployer:
   balance:
-    amount: 100000000
+    amount: 1000000000
     unit: ether
 
 contracts: 
@@ -22,7 +22,9 @@ contracts:
     name: Challenge
     constructor:
       args: []
-      value: "1000000000000000000"
+      value:
+        amount: 10000
+        unit: ether
       # gas: "0"
     checks: []
     visible: True
@@ -35,12 +37,16 @@ contracts:
     name: Prover
     constructor:
       args: []
-      value: "0"
+      value:
+        amount: 0
+        unit: wei
       # gas: "0"
     checks:
       - func: check
         args: []
-        value: "0"
+        value:
+          amount: 0
+          unit: wei
         # gas: "0"
         check: True
     visible: True

@@ -101,7 +101,8 @@ const deployChallenge = async () => {
         switch (contract.type) {
             case 'source': {
                 const { abi, bytecode } = compileContract(data, contract.name);
-                const deploy_contract = await deployContract(web3, abi, bytecode, constructor.value, constructor.args, constructor.gas);
+                const value = web3.utils.toWei(constructor.value.amount, constructor.value.unit);
+                const deploy_contract = await deployContract(web3, abi, bytecode, value, constructor.args, constructor.gas);
                 const hash = createHash('sha1').update(bytecode).update(randomBytes(32)).digest('hex');
                 let challengeContract = {
                     deploy_contract: deploy_contract,
