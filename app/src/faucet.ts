@@ -1,6 +1,16 @@
 import { Request, Response } from 'express';
 import { Web3 } from 'web3';
-import { Web3Request } from './index.js';
+import { EtherUnits } from 'web3-utils';
+import { web3 } from './web3.js';
+import { config } from './config.js';
+
+interface FundRecord {
+    [address: string]: {
+        value: bigint;
+    }
+}
+
+let fundRecords: FundRecord = {};
 
 export const fundAccount = async (web3: Web3, account: string, amount: string): Promise<boolean> => {
     try {
@@ -22,9 +32,12 @@ export const fundAccount = async (web3: Web3, account: string, amount: string): 
 };
 
 export const faucetHandler = async (req: Request, res: Response) => {
+    if (!config.faucet.enabled) {
+        res.status(400).json({ status: 'error', message: 'Faucet is disabled' });
+        return;
+    }
 
     let address = req.body.address;
-    console.log(address)
 
     if (!address || typeof address !== 'string') {
         res.status(400).json({ status: 'error', message: 'Invalid request' });
@@ -36,10 +49,26 @@ export const faucetHandler = async (req: Request, res: Response) => {
         return;
     }
 
-    if (await fundAccount((req as Web3Request).web3, address, Web3.utils.toWei('100', 'ether')) === false) {
+    let fundAmount = Web3.utils.toWei(config.faucet.amount, config.faucet.unit as EtherUnits);
+    let fundLimitAmount = Web3.utils.toWei(config.faucet.limit.amount, config.faucet.limit.unit as EtherUnits);
+
+    if(!fundRecords[address]){
+        fundRecords[address] = {
+            value: BigInt(0)
+        }
+    }
+
+    if (fundRecords[address].value >= BigInt(fundLimitAmount)) {
+        res.status(400).json({ status: 'error', message: 'Oh, you just need so much, don\'t you' });
+        return;
+    }
+
+    if (await fundAccount(web3, address, fundAmount) === false) {
         res.status(500).json({ status: 'error', message: 'Failed to fund account' });
         return;
     }
 
-    res.json({ status: 'ok', message: 'Successfully fund your account!' });
+    fundRecords[address].value += BigInt(fundAmount);
+
+    res.json({ status: 'ok', message: 'Successfully funded your account' });
 }

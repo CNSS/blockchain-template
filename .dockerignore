@@ -1,6 +1,7 @@
 .dockerignore
 .DS_Store
 .git
+.gitkeep
 .github
 .gitignore
 .gitlab-ci.yml

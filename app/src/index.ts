@@ -1,33 +1,22 @@
 import express from 'express';
+import { Response } from 'express';
 import { proxyHandler } from './proxy.js';
-import { Web3 } from 'web3';
 import { deployChallenge, challenge } from './deploy.js';
-import { env } from 'process';
-import { time } from 'console';
-import * as fs from "fs";
-import { boxHandler } from './box.js';
 import { faucetHandler } from './faucet.js';
 import { flagHandler } from './flag.js';
-import path from 'path';
 import rateLimit from 'express-rate-limit';
+import { loadConfig } from './config.js';
+import { initWeb3 } from './web3.js';
+import { config } from './config.js';
 
-export interface Web3Request extends express.Request {
-    web3: Web3;
-}
+loadConfig();
+initWeb3();
 
-const funderPrivateKey = fs.readFileSync('priv-key', 'utf8');
-const providerUrl = env.PROVIDER_URL ?? "http://127.0.0.1:58545/";
-fetch(providerUrl, {signal: AbortSignal.timeout(10000)});
-
-const web3 = new Web3(providerUrl);
-const funder = web3.eth.accounts.privateKeyToAccount(`0x${funderPrivateKey}`);
-web3.eth.accounts.wallet.add(funder);
-web3.defaultAccount = funder.address;
-await deployChallenge(web3);
+await deployChallenge();
 
 const limiter = rateLimit({
-	windowMs: 5 * 1000, 
-	limit: 4,
+	windowMs: 30 * 1000, 
+	limit: 10,
 	standardHeaders: false, 
 	legacyHeaders: false, 
 })
@@ -41,28 +30,53 @@ app.use(express.json());
 app.set("view engine", "ejs");
 app.use('/static', express.static('static'));
 
-app.use((req, res, next) => {
-    (req as Web3Request).web3 = web3;
-    next();
-})
-
-app.get('/health', (req, res) => {
-    res.json({ status: 'ok' });
-});
-
-app.get('/faucet', (req, res) => {
-    res.render('faucet');
+app.get('/health', (_, res) => {
+    res.json({ status: 'ok'});
 });
 
 app.post('/faucet', limiter, faucetHandler);
 
 app.get('/flag', limiter, flagHandler);
 
-app.use((req, res) => {
-    res.render('index', { challenge: challenge });
-})
+app.get('/faucet', (_, res: Response) => {
+    res.render('faucet', {
+        faucet: {
+            enabled: config.faucet.enabled,
+            amount: config.faucet.amount,
+            unit: config.faucet.unit,
+            limit: {
+                amount: config.faucet.limit.amount,
+                unit: config.faucet.limit.unit
+            }
+        }
+    });
+});
 
-app.use(function (req, res) {
+app.get('/', (_, res: Response) => {
+    let contracts = [] as any[];
+    challenge.contracts.forEach(contract => {
+        if(!contract.config.visible) {
+            return;
+        }
+
+        contracts.push({
+            address: contract.config.show_address ? (contract.deploy_contract.options.address ?? 'Not Deployed') : 'Hidden',
+            name: contract.config.name,
+            filename: contract.config.show_filename ? contract.config.filename : 'Hidden'
+        });
+    });
+    res.render('index', {
+        faucetEnabled: config.faucet.enabled,
+        description: config.description,
+        contracts: contracts
+    });
+});
+
+app.all('*', (_, res: Response) => {
+    res.status(404).send('Not Found');
+});
+
+app.use(function (_, res: Response) {
     process.on('uncaughtException', function(err) { 
         console.log(err);
         res.status(500).send('Internal Server Error');

@@ -1,0 +1,36 @@
+description: |
+  Make the check() function return true
+
+wrong_flag_message: Are you sure? Here\' s nothing named flag ...
+
+faucet:
+  enabled: False
+  amount: 10
+  unit: ether
+  limit:
+    amount: 100
+    unit: ether
+
+deployer:
+  balance:
+    amount: 100000000
+    unit: ether
+
+contracts: 
+  - type: source
+    filename: chall.sol
+    name: Challenge
+    constructor:
+      args: []
+      value: "1000000000"
+      # gas: "0"
+    checks:
+      - func: check
+        args: []
+        value: "0"
+        # gas: "0"
+        check: True
+    visible: True
+    show_address: True
+    show_filename: True
+

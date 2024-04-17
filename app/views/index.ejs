@@ -1,27 +1,31 @@
 <%- include('partials/header', { pageTitle: 'Home' , customCss: []}) %>
 
 <body>
+    <% 
+    let navBtns = [];
+    if (faucetEnabled){
+        navBtns.push({
+            url: '/faucet',
+            class: 'nes-btn',
+            text: 'Faucet'
+        });
+    }
+    navBtns.push({
+        url: '/flag',
+        class: 'nes-btn is-warning',
+        text: 'Get Flag'
+    });
+    %>
     <%- include('partials/nav-bar', {
         navTitle: 'Bl0ckch@in W3b Serv1c3',
-        navBtns: [
-            {
-                url: '/faucet',
-                class: 'nes-btn',
-                text: 'Faucet'
-            },
-            {
-                url: '/flag',
-                class: 'nes-btn is-warning',
-                text: 'Get Flag'
-            }
-        ]
+        navBtns: navBtns
     }) %>
     
     <div class="main-container">
 
         <div class="nes-container with-title container challenge-container">
             <h3 class="title">Challenge Description</h3>
-            <div id="description"><span class="nes-text is-primary"><%= challenge.description %></span></div>
+            <div id="description"><span class="nes-text is-primary"><%= description %></span></div>
         </div>
 
 
@@ -37,14 +41,8 @@
         <div class="nes-container with-title container contracts-container">
             <h3 class="title">Information of Contracts</h3>
 
-            <% for (let i = 0; i < challenge.contracts.length; i++) { %>
-                <% let contract = challenge.contracts[i] %>
-
-                <% if (contract.visible) { %>
-
-                    <% let contractAddress = contract.show_address ? (contract.deploy_contract ? contract.deploy_contract.options.address : 'not deployed') : 'hidden' %>
-                    <% let contractFilename = contract.show_filename ? contract.filename : 'hidden' %>
-
+            <% for (let i = 0; i < contracts.length; i++) { %>
+                <% let contract = contracts[i] %>
                     <div class="nes-container is-rounded is-centered with-title container contract-container">
                         <b class="title"><i class="nes-icon trophy is-small"></i> Contract <%= i %> <i class="nes-icon trophy is-small"></i></b>
                         <div class="nes-field" style="text-align: left;">
@@ -56,7 +54,7 @@
 
                         <div class="nes-field" style="text-align: left;">
                             <label for="contract-filename-<%= i %>">Filename</label>
-                            <input type="text" id="contract-filename-<%= i %>" class="nes-input" value="<%= contractFilename %>" readonly>
+                            <input type="text" id="contract-filename-<%= i %>" class="nes-input" value="<%= contract.filename %>" readonly>
                         </div>
 
                         <br>
@@ -64,12 +62,11 @@
                         <div class="nes-field" style="text-align: left;">
                             <label for="contract-address-<%= i %>">Address</label>
                             <div class="nes-field is-inline" id="contract-address-<%= i %>">
-                                <input type="text" class="nes-input" id="contract-address-input-<%= i %>" value="<%= contractAddress %>" readonly>
+                                <input type="text" class="nes-input" id="contract-address-input-<%= i %>" value="<%= contract.address %>" readonly>
                                 <button class="nes-btn is-primary inline-copy-btn-right" onclick="copyToClipboard('contract-address-input-<%= i %>')">Copy</button>
                             </div>
                         </div>
                     </div>
-                <% } %>
             <% } %>
         </div>
     </div>

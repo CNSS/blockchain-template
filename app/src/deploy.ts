@@ -6,29 +6,21 @@ import * as yaml from 'js-yaml';
 import { exit } from 'process';
 import { fundAccount } from './faucet.js';
 import path from 'path';
+import { EtherUnits } from 'web3-utils';
+import { web3 } from './web3.js';
+import { ContractConfig, config } from './config.js';
 
-export interface Challenge {
-    description: string;
-    contracts: {
-        type: string;
-        filename: string;
-        name: string;
-        deploy_contract: Contract<any>;
-        constructor: {
-            args: any[];
-            value: string;
-            gas: string;
-        };
-        checks: {
-            func: string;
-            args: any[];
-            value: string;
-            gas: string;
-        }[];
-        visible: boolean;
-        show_address: boolean;
-        show_filename: boolean;
-    }[];
+interface ChallengeContract {
+    deploy_contract: Contract<any>;
+    config: ContractConfig;
+}
+
+interface Challenge {
+    contracts: ChallengeContract[];
+};
+
+let challenge = {
+    contracts: [] as ChallengeContract[]
 };
 
 let deployer: Web3Account;
@@ -66,11 +58,11 @@ async function deployContract(web3: Web3, abi: any, bytecode: string, value: str
 
     let tx = contract.deploy({ data: bytecode, arguments: args })
 
-    if(!gas){
+    if (!gas) {
         gas = (await tx.estimateGas({ from: deployer.address, value: value })).toString();
     }
 
-    let deploy_contract = await tx.send({ from: deployer.address, value: value, gas: gas});
+    let deploy_contract = await tx.send({ from: deployer.address, value: value, gas: gas });
 
     if (!deploy_contract.options.address) {
         console.error('Failed to deploy contract');
@@ -80,43 +72,49 @@ async function deployContract(web3: Web3, abi: any, bytecode: string, value: str
     return deploy_contract;
 }
 
-let challenge: Challenge;
 
-export { challenge };
-
-export const deployChallenge = async (web3: Web3) => {
+const deployChallenge = async () => {
     if (!deployer) {
         deployer = web3.eth.accounts.create();
-        if (await fundAccount(web3, deployer.address,  web3.utils.toWei('1000', 'ether')) === false) {
+        if (await fundAccount(web3, deployer.address, web3.utils.toWei(config.deployer.balance.amount, config.deployer.balance.unit as EtherUnits)) === false) {
             console.error('Failed to fund deployer account');
             exit(1);
         }
         web3.eth.accounts.wallet.add(deployer);
     }
 
-    challenge = yaml.load(fs.readFileSync('challenge/challenge.yml', 'utf8')) as Challenge;
-
-    await challenge.contracts.reduce(async (previous, contract) => {
+    await config.contracts.reduce(async (previous, contract) => {
         await previous;
 
-        const filename = path.join('challenge/contracts/', contract.filename);
+        const filename = path.join('contracts/', contract.filename);
         const data = fs.readFileSync(filename, 'utf8');
         const constructor = contract.constructor;
         switch (contract.type) {
             case 'source': {
                 const { abi, bytecode } = compileContract(data, contract.name);
                 const deploy_contract = await deployContract(web3, abi, bytecode, constructor.value, constructor.args, constructor.gas);
-                contract.deploy_contract = deploy_contract;
+                let challengeContract = {
+                    deploy_contract: deploy_contract,
+                    config: structuredClone(contract)
+                };
+                challenge.contracts.push(challengeContract);
                 break;
             }
             case 'bytecode': {
-                const deploy_contract = await deployContract(web3, [], data, constructor.value, constructor.args, constructor.gas);
-                contract.deploy_contract = deploy_contract;
-                break;
+                console.log('Deploying contract from bytecode is not supported');
+                exit(1);
             }
             default:
                 console.error('Invalid contract type');
                 exit(1);
         }
     }, Promise.resolve());
+};
+
+export { 
+    ChallengeContract, 
+    Challenge, 
+    challenge, 
+    deployer, 
+    deployChallenge 
 };

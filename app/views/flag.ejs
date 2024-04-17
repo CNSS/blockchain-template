@@ -1,20 +1,24 @@
 <%- include('partials/header', { pageTitle: 'Home' , customCss: ['static/css/flag.css']}) %>
 
 <body>
+    <% 
+    let navBtns = [];
+    if (faucetEnabled){
+        navBtns.push({
+            url: '/faucet',
+            class: 'nes-btn',
+            text: 'Faucet'
+        });
+    }
+    navBtns.push({
+        url: '/flag',
+        class: 'nes-btn is-warning',
+        text: 'Get Flag'
+    });
+    %>
     <%- include('partials/nav-bar', {
         navTitle: 'Bl0ckch@in W3b Serv1c3',
-        navBtns: [
-            {
-                url: '/',
-                class: 'nes-btn',
-                text: 'Chall Info'
-            },
-            {
-                url: '/faucet',
-                class: 'nes-btn',
-                text: 'Faucet'
-            }
-        ]
+        navBtns: navBtns
     }) %>
     
     <div class="main-container">
