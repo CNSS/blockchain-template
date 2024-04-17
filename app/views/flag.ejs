@@ -1,0 +1,58 @@
+<%- include('partials/header', { pageTitle: 'Home' , customCss: ['static/css/flag.css']}) %>
+
+<body>
+    <%- include('partials/nav-bar', {
+        navTitle: 'Bl0ckch@in W3b Serv1c3',
+        navBtns: [
+            {
+                url: '/',
+                class: 'nes-btn',
+                text: 'Chall Info'
+            },
+            {
+                url: '/faucet',
+                class: 'nes-btn',
+                text: 'Faucet'
+            }
+        ]
+    }) %>
+    
+    <div class="main-container">
+    <section class="nes-container container">
+        <section class="message-list">
+            <section class="message -right">
+                <div class="nes-balloon from-right">
+                    <p>
+                        Ciao, hacker! I'm the flag bot! What can I do for you?
+                    </p>
+                </div>
+                <i class="nes-squirtle"></i>
+            </section>
+
+            <section class="message -left">
+                <i class="nes-mario"></i>
+                <div class="nes-balloon from-left">
+                    <p>Hello! I want the flag pleazzzzzzz~</p>
+                </div>
+            </section>
+    
+            <section class="message -right">
+                <div class="nes-balloon from-right">
+                    <p>
+                        <%= flag %>
+                    </p>
+                </div>
+                <i class="nes-squirtle"></i>
+            </section>
+
+            <section class="message -left">
+                <i class="nes-mario"></i>
+                <div class="nes-balloon from-left">
+                    <p>Thank you……or should I?</p>
+                </div>
+            </section>
+        </section>
+    </section>
+</body>
+
+<%- include('partials/footer') %>

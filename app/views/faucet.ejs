@@ -1,0 +1,80 @@
+<%- include('partials/header', { pageTitle: 'Home' , customCss: ['static/css/faucet.css']}) %>
+
+<body>
+    <%- include('partials/nav-bar', {
+        navTitle: 'Bl0ckch@in W3b Serv1c3',
+        navBtns: [
+            {
+                url: '/',
+                class: 'nes-btn',
+                text: 'Chall Info'
+            },
+            {
+                url: '/flag',
+                class: 'nes-btn is-warning',
+                text: 'Get Flag'
+            }
+        ]
+    }) %>
+    
+    <div class="main-container">
+        <div class="nes-container with-title container faucet-container">
+            <h3 class="title">Faucet</h3>
+            <div class="nes-field">
+                <label for="addressField">Address</label>
+                <input type="text" id="addressField" name="address" class="nes-input" placeholder="0xdeadbeef1145">
+            </div>
+            <button type="submit" class="nes-btn is-primary" style="margin-top: 10px;" id="fundBtn">Fund</button>
+            <div id="fundResult" style="margin-top: 10px;text-align: center;"></div>
+        </div>
+    </div>  
+                
+</body>
+
+<script>
+    let fundBtn = document.getElementById("fundBtn");
+    let fundResult = document.getElementById("fundResult");
+    let addr = document.getElementById("addressField");
+
+    function parseResultHTML(type, message) {
+        return `<h2 class="nes-text is-${type}">${message}</h2>`;
+    }
+
+    fundBtn.onclick = (e) => {
+        fundBtn.disabled = true;
+        fundResult.innerHTML = parseResultHTML('warning', 'Funding...');
+        let address = addr.value;
+
+        if (!/^0x[0-9a-fA-F]{40}$/.test(address)) {
+          fundResult.innerHTML = parseResultHTML('error', 'Invalid address');
+          fundBtn.disabled = false;
+          return;
+        }
+
+        fetch("/faucet", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            address: address,
+          }),
+        })
+        
+          .then((response) => response.json())
+          .then((response) => {
+            if (response.status === 'ok') {
+              fundResult.innerHTML = parseResultHTML('success', response.message ? response.message : 'Funded successfully');
+            } else {
+              fundResult.innerHTML = parseResultHTML('error', response.message ? response.message : 'Failed to fund');
+            }
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+        fundBtn.disabled = false;
+      }
+</script>
+
+
+<%- include('partials/footer') %>

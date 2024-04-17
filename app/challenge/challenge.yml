@@ -1,0 +1,19 @@
+contracts: 
+  - type: source
+    filename: chall.sol
+    name: Challenge
+    constructor:
+      args: []
+      value: "0"
+      # gas: "0"
+    checks:
+      - func: isSolved
+        args: []
+        value: "0"
+        # gas: "0"
+    visible: True
+    show_address: True
+    show_filename: True
+
+description: |
+  Make the isSolved() function return true

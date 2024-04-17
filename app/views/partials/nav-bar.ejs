@@ -1,0 +1,15 @@
+<div class="nav">
+    <div class="nav-elements">
+        <span class="nav-title">
+            <h1><i class="nes-icon is-medium coin" style="transform: scale(3) translate(0%, 10%);"></i> <%= navTitle %> </h1>
+        </span>
+
+        <div class="nav-btns">
+            <% navBtns.forEach(navBtn => { %>
+                <a href="<%= navBtn.url %>" class="<%= navBtn.class %>" <% if (navBtn.style) { %>style="<%= navBtn.style %>"<% } %>>
+                    <%= navBtn.text %>
+                </a>
+            <% }) %>
+        </div>
+    </div>
+</div>

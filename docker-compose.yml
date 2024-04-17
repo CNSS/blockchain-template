@@ -1,0 +1,13 @@
+version: "3"
+services:
+  web:
+    # build: .
+    image: registry.hurrison.com/blockchain/sign-in:v1
+    ports:
+      - "4300:3000"
+    volumes:
+      - ./app/static:/app/static
+      - ./app/views:/app/views
+      - ./app/src:/app/src
+      - ./app/package.json:/app/package.json
+      - ./app/yarn.lock:/app/yarn.lock
