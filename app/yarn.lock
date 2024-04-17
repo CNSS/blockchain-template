@@ -1099,10 +1099,10 @@ simple-update-notifier@^2.0.0:
   dependencies:
     semver "^7.5.3"
 
-solc@^0.8.25:
-  version "0.8.25"
-  resolved "https://registry.npmjs.org/solc/-/solc-0.8.25.tgz#393f3101617388fb4ba2a58c5b03ab02678e375c"
-  integrity sha512-7P0TF8gPeudl1Ko3RGkyY6XVCxe2SdD/qQhtns1vl3yAbK/PDifKDLHGtx1t7mX3LgR7ojV7Fg/Kc6Q9D2T8UQ==
+solc@0.8.13:
+  version "0.8.13"
+  resolved "https://registry.npmjs.org/solc/-/solc-0.8.13.tgz#bafc7fcc11a627e2281e489076b80497123bb704"
+  integrity sha512-C0yTN+rjEOGO6uVOXI8+EKa75SFMuZpQ2tryex4QxWIg0HRWZvCHKfVPuLZ5wx06Sb6GBp6uQA5yqQyXZnXOJw==
   dependencies:
     command-exists "^1.2.8"
     commander "^8.1.0"

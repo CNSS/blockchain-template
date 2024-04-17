@@ -34,3 +34,12 @@ contracts:
     show_file: True
     show_address: True
     show_filename: True
+
+solc:
+  version: "0.7.6"
+
+genesis:
+  chain_id: 1337
+  timestamp: "0x609ac710"
+  gas_limit: "0x1312d00"
+  difficulty: "0x1"
