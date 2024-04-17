@@ -44,7 +44,7 @@ export const flagHandler = async (req: Request, res: Response) => {
     }else{
         res.render('flag', { 
             faucetEnabled: config.faucet.enabled,
-            flag: readFileSync('/flag', 'utf-8')
+            flag: `Wow, how do you achieve that. Here's you flag: <b>${readFileSync('/flag', 'utf-8')}</b>`
         });
     }
 }

@@ -1,7 +1,7 @@
 description: |
   Make the check() function return true
 
-wrong_flag_message: Are you sure? Here\' s nothing named flag ...
+wrong_flag_message: Are you sure? Here' s nothing named flag ...
 
 faucet:
   enabled: False
