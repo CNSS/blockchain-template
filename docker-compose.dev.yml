@@ -1,8 +1,7 @@
 version: "3"
 services:
   web:
-    # build: .
-    image: registry.hurrison.com/blockchain/sign-in:v1
+    build: .
     ports:
       - "4300:3000"
     volumes:
