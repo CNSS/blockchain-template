@@ -1,5 +1,9 @@
 # blockchain-template
 
+This is a CTF blockchain challenge template
+
+
+
 ## ScreenShot
 
 ### Home
@@ -26,6 +30,7 @@
 
 ## Feature
 - Configurable
+- RPC filtered
 - Stable
 - Beautiful UI
 
