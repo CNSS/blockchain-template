@@ -1,9 +1,72 @@
 import { Layout } from './Layout.tsx';
 import styles from './Flag.module.scss';
-import { className } from './utils.tsx';
+import { api, ApiError, className } from './utils.tsx';
 import nes from './nes.tsx';
+import React from 'react';
+
+interface FlagResponse {
+    success: boolean;
+    flag: string;
+}
 
 const Flag = () => {
+    const [flag, setFlag] = React.useState<FlagResponse | undefined>(undefined);
+    const [rateLimit, setRateLimit] = React.useState<boolean>(false);
+
+    React.useEffect(() => {
+        api<FlagResponse>("GET", "flag")
+            .then((flag) => {
+                setRateLimit(false);
+                setFlag(flag);
+            })
+            .catch((err: ApiError) => {
+                if (err.apiError.status == 429) {
+                    setRateLimit(true);
+                    setFlag(undefined);
+                    return;
+                }
+                setRateLimit(false);
+                setFlag(undefined);
+            });
+    }, []);
+
+    if (flag === undefined) {
+        return (
+            <Layout>
+                <section className={className(nes.container, styles.container)}>
+                    <section className={className(styles.messageList)}>
+                        <section className={className(styles.messageRight)}>
+                            <div className={className(nes.rightBalloon, styles.messageNesBalloon)}>
+                                <p>
+                                    Ciao, hacker! I'm the flag bot! What can I do for you?
+                                </p>
+                            </div>
+                            <i className={className(nes.squirtle, styles.messageRightI)}></i>
+                        </section>
+
+                        <section className={className(styles.messageLeft)}>
+                            <i className={className(nes.mario, styles.messageLeftI)}></i>
+                            <div className={className(nes.leftBalloon, styles.messageNesBalloon)}>
+                                <p>Hello! I want the flag pleazzzzzzz~</p>
+                            </div>
+                        </section>
+
+                        {
+                            rateLimit && (
+                                <section className={className(styles.messageRight)}>
+                                    <div className={className(nes.rightBalloon)}>
+                                        <p>Slown down MAN!!!</p>
+                                    </div>
+                                    <i className={className(nes.squirtle, styles.messageRightI)}></i>
+                                </section>
+                            )
+                        }
+                    </section>
+                </section>
+            </Layout>
+        )
+    }
+
     return (
         <Layout>
             <section className={className(nes.container, styles.container)}>
@@ -26,9 +89,13 @@ const Flag = () => {
 
                     <section className={className(styles.messageRight)}>
                         <div className={className(nes.rightBalloon)}>
-                            <p>
-                                {'flag{***}'}
-                            </p>
+                            {
+                                flag.success ? (
+                                    <p><b className={className(nes.text, nes.primary)}>{flag.flag}</b></p>
+                                ) : (
+                                    <p>{flag.flag}</p>
+                                )
+                            }
                         </div>
                         <i className={className(nes.squirtle, styles.messageRightI)}></i>
                     </section>
@@ -36,7 +103,13 @@ const Flag = () => {
                     <section className={className(styles.messageLeft)}>
                         <i className={className(nes.mario, styles.messageLeftI)}></i>
                         <div className={className(nes.leftBalloon)}>
-                            <p>Thank you……or should I?</p>
+                            {
+                                flag.success ? (
+                                    <p>Thank you!</p>
+                                ) : (
+                                    <p>Thank you……or should I?</p>
+                                )
+                            }
                         </div>
                     </section>
                 </section>

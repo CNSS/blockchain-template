@@ -1,5 +1,21 @@
 import { RefObject } from "react";
 
+interface ApiErrorMessage {
+    status: number;
+    content: string | null;
+}
+
+class ApiError extends Error {
+
+    public apiError: ApiErrorMessage;
+
+    constructor(message: ApiErrorMessage) {
+        super(`Api Error: ${message.status} - ${message.content}`);
+        this.name = "ApiError";
+        this.apiError = message;
+    }
+}
+
 const copyInputValue = (input: RefObject<HTMLInputElement>) => {
     input.current?.select();
     navigator.clipboard.writeText(input.current?.value || "");
@@ -29,10 +45,14 @@ const api = async <T,>(method: string, endpoint: string, body?: unknown): Promis
     const response = await fetch(`/api/${endpoint}`, request);
 
     if (!response.ok) {
-        throw new Error((await response.text()) || response.statusText);
+        throw new ApiError({
+            status: response.status,
+            content: await response.text(),
+        });
     }
 
     return response.json() as T;
 }
 
 export { copyInputValue, attr, className, api };
+export type { ApiError, ApiErrorMessage };

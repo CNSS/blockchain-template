@@ -24,7 +24,9 @@ const nes = {
     icon: 'nes-icon',
     small: 'is-small',
     warning: 'is-warning',
-    disabled: 'is-disabled'
+    disabled: 'is-disabled',
+    success: 'is-success',
+    error: 'is-error',
 };
 
 export default nes;

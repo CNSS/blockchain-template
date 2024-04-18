@@ -6,10 +6,11 @@ import { proxyHandler } from './proxy.js';
 import { deployChallenge, challenge } from './deploy.js';
 import { faucetFundHandler, faucetViewHandler } from './faucet.js';
 import { downloadHandler } from './download.js';
-import { flagHandler } from './flag.js';
+import { flagApiHandler, flagHandler } from './flag.js';
 import { loadConfig } from './config.js';
 import { initWeb3 } from './web3.js';
 import { config } from './config.js';
+import { boxHandler } from './box.js';
 
 loadConfig();
 initWeb3();
@@ -37,7 +38,11 @@ app.get('/health', (_, res) => {
     res.json({ status: 'ok'});
 });
 
-app.post('/faucet', limiter, faucetFundHandler);
+app.get('/api/box', boxHandler);
+
+app.get('/api/flag', limiter, flagApiHandler);
+
+app.post('/api/faucet', limiter, faucetFundHandler);
 
 app.get('/flag', limiter, flagHandler);
 
