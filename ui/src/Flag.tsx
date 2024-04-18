@@ -54,8 +54,8 @@ const Flag = () => {
                         {
                             rateLimit && (
                                 <section className={className(styles.messageRight)}>
-                                    <div className={className(nes.rightBalloon)}>
-                                        <p>Slown down MAN!!!</p>
+                                    <div className={className(nes.rightBalloon, styles.messageNesBalloon)}>
+                                        <p>Slow down MAN!!!</p>
                                     </div>
                                     <i className={className(nes.squirtle, styles.messageRightI)}></i>
                                 </section>
@@ -88,7 +88,7 @@ const Flag = () => {
                     </section>
 
                     <section className={className(styles.messageRight)}>
-                        <div className={className(nes.rightBalloon)}>
+                        <div className={className(nes.rightBalloon, styles.messageNesBalloon)}>
                             {
                                 flag.success ? (
                                     <p><b className={className(nes.text, nes.primary)}>{flag.flag}</b></p>
@@ -102,12 +102,12 @@ const Flag = () => {
 
                     <section className={className(styles.messageLeft)}>
                         <i className={className(nes.mario, styles.messageLeftI)}></i>
-                        <div className={className(nes.leftBalloon)}>
+                        <div className={className(nes.leftBalloon, styles.messageNesBalloon)}>
                             {
                                 flag.success ? (
                                     <p>Thank you!</p>
                                 ) : (
-                                    <p>Thank you……or should I?</p>
+                                    <p>Really?</p>
                                 )
                             }
                         </div>
