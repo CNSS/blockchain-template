@@ -13,8 +13,8 @@ const Layout = (props: Props) => {
             <NavBar />
             <div className={styles.mainContainer}>
                 {props.children}
+                <Footer />
             </div>
-            <Footer />
         </>
     );
 };
