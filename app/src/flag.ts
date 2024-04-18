@@ -41,22 +41,6 @@ const check = async () => {
 }
 
 const flagHandler = async (req: Request, res: Response) => {
-
-
-    if (! await check()) {
-        res.render('flag', {
-            faucetEnabled: config.faucet.enabled,
-            flag: config.wrong_flag_message
-        });
-    } else {
-        res.render('flag', {
-            faucetEnabled: config.faucet.enabled,
-            flag: `Wow, how do you achieve that? Here's your flag: ${execFileSync('/readflag').toString()}`
-        });
-    }
-}
-
-const flagApiHandler = async (req: Request, res: Response) => {
     if (! await check()) {
         res.json({
             success: false,
@@ -70,4 +54,4 @@ const flagApiHandler = async (req: Request, res: Response) => {
     }
 }
 
-export { flagHandler, flagApiHandler };
+export { flagHandler };

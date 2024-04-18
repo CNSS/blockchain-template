@@ -25,7 +25,7 @@ const fundAccount = async (web3: Web3, account: string, amount: string): Promise
     }
 };
 
-const faucetFundHandler = async (req: Request, res: Response) => {
+const faucetHandler = async (req: Request, res: Response) => {
     if (!config.faucet.enabled) {
         res.json({ status: 'error', message: 'Faucet is disabled' });
         return;
@@ -64,18 +64,4 @@ const faucetFundHandler = async (req: Request, res: Response) => {
     res.json({ status: 'ok', message: 'Successfully funded your account' });
 }
 
-const faucetViewHandler = async (req: Request, res: Response) => {
-    res.render('faucet', {
-        faucet: {
-            enabled: config.faucet.enabled,
-            amount: config.faucet.amount,
-            unit: config.faucet.unit,
-            limit: {
-                amount: config.faucet.limit.amount,
-                unit: config.faucet.limit.unit
-            }
-        }
-    });
-}
-
-export {fundAccount, faucetFundHandler, faucetViewHandler};
+export {fundAccount, faucetHandler};
