@@ -1,0 +1,37 @@
+.container {
+    composes: container from "./Layout.module.scss";
+}
+
+.message-list {
+    display: flex;
+    flex-direction: column;
+}
+
+.message {
+    display: flex;
+    margin-top: 2rem;
+}
+
+.message-nes-balloon {
+    max-width: 800px;
+}
+
+.message-left {
+    composes: message;
+    align-self: flex-start;
+}
+
+.message-right {
+    composes: message;
+    align-self: flex-end;
+}
+
+.message-left-i {
+    align-self: flex-end;
+    margin-right: 2rem;
+}
+
+.message-right-i {
+    align-self: flex-end;
+    margin-left: 2rem;
+}

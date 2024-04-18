@@ -1,0 +1,12 @@
+.container {
+    composes: container from "./Layout.module.scss";
+}
+
+.fund-button {
+    margin-top: 10px;
+}
+
+.fund-result {
+    margin-top: 10px;
+    text-align: center;
+}

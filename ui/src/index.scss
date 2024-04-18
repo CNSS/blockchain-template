@@ -1,0 +1,13 @@
+@font-face {
+  font-family: pixel-font;
+  src: url("assets/font/PressStart2P.ttf");
+}
+
+:root {
+  --default-font: "Arial", "Microsoft YaHei", "黑体", "宋体", sans-serif;
+  --width: 1500px;
+}
+
+* {
+  font-family: "pixel-font", var(--default-font);
+}
