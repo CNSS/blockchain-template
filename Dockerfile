@@ -1,6 +1,16 @@
+FROM node:18-alpine as UIBuilder
+
+COPY ui /ui
+
+WORKDIR /ui
+
+RUN yarn &&\
+    yarn build
+
 FROM node:18-alpine
 
 COPY app /app
+COPY --from=UIBuilder /ui/dist /app/ui
 
 COPY entrypoint.sh /entrypoint.sh
 COPY readflag /readflag
