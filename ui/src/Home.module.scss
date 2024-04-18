@@ -1,0 +1,11 @@
+.container {
+    composes: container from "./Layout.module.scss";
+}
+
+.inline-copy-btn-right {
+    margin-left: 10px!important;
+}
+
+.left-text {
+    text-align: left;
+}
