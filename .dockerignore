@@ -12,3 +12,5 @@ docker-compose.yml
 *.example
 app/node_modules/*
 app/dist/*
+ui/node_modules/*
+ui/dist/*

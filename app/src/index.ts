@@ -11,6 +11,7 @@ import { loadConfig } from './config.js';
 import { initWeb3 } from './web3.js';
 import { config } from './config.js';
 import { boxHandler } from './box.js';
+import { readFileSync } from 'fs';
 
 loadConfig();
 initWeb3();
@@ -31,10 +32,9 @@ app.use(morgan('combined'));
 app.post('/rpc', express.raw({ type: "*/*" }), proxyHandler);
 
 app.use(express.json());
-app.set("view engine", "ejs");
-app.use('/static', express.static('static'));
+app.use('/assets', express.static('ui/assets'));
 
-app.get('/health', (_, res) => {
+app.get('/api/health', (_, res) => {
     res.json({ status: 'ok'});
 });
 
@@ -44,36 +44,10 @@ app.get('/api/flag', limiter, flagApiHandler);
 
 app.post('/api/faucet', limiter, faucetFundHandler);
 
-app.get('/flag', limiter, flagHandler);
-
-app.get('/faucet', faucetViewHandler);
-
-app.get('/download', downloadHandler);
-
-app.get('/', (_, res: Response) => {
-    let contracts = [] as any[];
-    challenge.contracts.forEach(contract => {
-        if(!contract.config.visible) {
-            return;
-        }
-
-        contracts.push({
-            address: contract.config.show_address ? (contract.deploy_contract.options.address ?? 'Not Deployed') : 'Hidden',
-            name: contract.config.name,
-            filename: contract.config.show_filename ? contract.config.filename : 'Hidden',
-            hash: contract.hash,
-            showFile: contract.config.show_file
-        });
-    });
-    res.render('index', {
-        faucetEnabled: config.faucet.enabled,
-        description: config.description,
-        contracts: contracts
-    });
-});
+const indexHtml = (readFileSync("ui/index.html")).toString();
 
 app.all('*', (_, res: Response) => {
-    res.status(404).send('Not Found');
+    res.send(indexHtml);
 });
 
 app.use(function (_, res: Response) {
