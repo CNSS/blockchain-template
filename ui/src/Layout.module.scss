@@ -3,6 +3,8 @@
 }
 
 .main-container {
+    position: relative;
     max-width: var(--width);
     width: 100%;
+    min-height: calc(100vh - var(--footer-height) - var(--navbar-height) - 10px);
 }

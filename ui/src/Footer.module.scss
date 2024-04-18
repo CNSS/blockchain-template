@@ -1,0 +1,15 @@
+.footer {
+    position: absolute;
+    bottom: calc(var(--footer-height) * -1);
+    max-height: var(--footer-height);
+    left: 50%;
+    margin-top: 60px;
+    width: fit-content;
+    transform: translateX(-50%);
+}
+
+.footer-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
