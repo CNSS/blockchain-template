@@ -8,9 +8,9 @@ interface LinkMap {
 }
 
 const allLinks: LinkMap = {
-    '/': <Link to='/' className={className(styles.rightButton, nes.button)}><div>Chall Info</div></Link>,
-    '/faucet': <Link to='/faucet' className={className(styles.rightButton, nes.button)}><div>Faucet</div></Link>,
-    '/flag': <Link to='/flag' className={className(styles.rightButton, nes.button, nes.warning)}><div>Get Flag</div></Link>
+    '/': <Link key={0} to='/' className={className(styles.rightButton, nes.button)}><div>Chall Info</div></Link>,
+    '/faucet': <Link key={1} to='/faucet' className={className(styles.rightButton, nes.button)}><div>Faucet</div></Link>,
+    '/flag': <Link key={2} to='/flag' className={className(styles.rightButton, nes.button, nes.warning)}><div>Get Flag</div></Link>
 };
 
 const NavBar = () => {

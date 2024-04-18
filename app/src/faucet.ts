@@ -27,19 +27,19 @@ const fundAccount = async (web3: Web3, account: string, amount: string): Promise
 
 const faucetFundHandler = async (req: Request, res: Response) => {
     if (!config.faucet.enabled) {
-        res.status(400).json({ status: 'error', message: 'Faucet is disabled' });
+        res.json({ status: 'error', message: 'Faucet is disabled' });
         return;
     }
 
     let address = req.body.address;
 
     if (!address || typeof address !== 'string') {
-        res.status(400).json({ status: 'error', message: 'Invalid request' });
+        res.json({ status: 'error', message: 'Invalid request' });
         return;
     }
 
     if (!isAddress(address)) {
-        res.status(400).json({ status: 'error', message: 'Invalid address' });
+        res.json({ status: 'error', message: 'Invalid address' });
         return;
     }
 
@@ -50,12 +50,12 @@ const faucetFundHandler = async (req: Request, res: Response) => {
 
 
     if (fundTotalAmountNumber + fundAmountNumber > fundLimitAmountNumber) {
-        res.status(400).json({ status: 'error', message: 'Oh, you just need so much, don\'t you' });
+        res.json({ status: 'error', message: 'Oh, you just need so much, don\'t you' });
         return;
     }
 
     if (await fundAccount(web3, address, fundAmount) === false) {
-        res.status(500).json({ status: 'error', message: 'Failed to fund account' });
+        res.json({ status: 'error', message: 'Failed to fund account' });
         return;
     }
 
