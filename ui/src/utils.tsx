@@ -17,8 +17,17 @@ class ApiError extends Error {
 }
 
 const copyInputValue = (input: RefObject<HTMLInputElement>) => {
-    input.current?.select();
-    navigator.clipboard.writeText(input.current?.value || "");
+    if (navigator.clipboard && window.isSecureContext) {
+        input.current?.select();
+        navigator.clipboard.writeText(input.current?.value || "");
+    } else {
+        input.current?.select();
+        try{
+            document.execCommand("copy");
+        }catch(e){
+            console.error("Copy failed", e);
+        }
+    }
 }
 
 const className = (...classes: string[]) => {
