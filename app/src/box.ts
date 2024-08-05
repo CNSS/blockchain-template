@@ -2,6 +2,9 @@ import { Request, Response } from 'express';
 import { challenge } from './deploy.js';
 import { config } from './config.js';
 
+const username = process.env.BASIC_AUTH_USERNAME;
+const password = process.env.BASIC_AUTH_PASSWORD;
+
 const boxHandler = (req: Request, res: Response) => {
     let contracts = [] as any[];
     challenge.contracts.forEach(contract => {
@@ -21,7 +24,11 @@ const boxHandler = (req: Request, res: Response) => {
     res.json({
         description: config.description,
         faucet: config.faucet,
-        contracts: contracts
+        contracts: contracts,
+        auth: {
+            username: username,
+            password: password
+        }
     });
 }
 

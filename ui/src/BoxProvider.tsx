@@ -25,10 +25,16 @@ interface ContractInfo {
     showFile: boolean;
 }
 
+interface BasicAuthCredential {
+    username: string | null;
+    password: string | null;
+}
+
 interface Box {
     description: string,
     faucet: FaucetConfig,
     contracts: ContractInfo[]
+    auth: BasicAuthCredential
 }
 
 const BoxContext = React.createContext<{ box: Box | undefined, loadingBox: boolean } | undefined>(undefined);

@@ -27,8 +27,26 @@ const limiter = rateLimit({
 
 const app = express();
 const port = 3000;
+const username = process.env.BASIC_AUTH_USERNAME;
+const password = process.env.BASIC_AUTH_PASSWORD;
 
 app.use(morgan('combined'));
+
+app.use((req, res, next) => {
+    if (username && password) {
+        const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
+        const [basicAuthUsername, basicAuthPassword] = Buffer.from(b64auth, 'base64').toString().split(':');
+
+        if (basicAuthUsername === username && basicAuthPassword === password) {
+            return next();
+        } else {
+            res.set('WWW-Authenticate', 'Basic realm="401"');
+            res.status(401).send('Authentication required.');
+        }
+    } else {
+        return next();
+    }
+});
 app.post('/rpc', express.raw({ type: "*/*" }), proxyHandler);
 
 app.use(express.json());

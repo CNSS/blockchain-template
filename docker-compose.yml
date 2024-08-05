@@ -6,6 +6,8 @@ services:
     container_name: chall
     restart: always
     environment:
-      - GZCTF_FLAG=CNSS{flag}
+      - FLAG=CNSS{flag}
+      - BASIC_AUTH_USERNAME=admin
+      - BASIC_AUTH_PASSWORD=admin123
     ports:
       - "53000:3000"

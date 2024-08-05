@@ -52,8 +52,15 @@ const Contract = (props: ContractProps) => {
 
 const Home = () => {
     const box = useBox();
-
     const rpcRef = React.createRef<HTMLInputElement>();
+
+    let rpcUrl;
+    if (!box.auth.username || !box.auth.password) {
+        rpcUrl = `${window.location.protocol}//${window.location.host}/rpc`;
+    } else {
+        rpcUrl = `${window.location.protocol}//${box.auth.username}:${box.auth.password}@${window.location.host}/rpc`;
+    }
+
     return (
         <Layout>
             <div className={className(nes.titledContainer, styles.container)}>
@@ -64,7 +71,7 @@ const Home = () => {
             <div className={className(nes.titledContainer, styles.container)}>
                 <h3 className={className(nes.text)}>Blockchain RPC Provider</h3>
                 <div className={className(nes.field, nes.inline)}>
-                    <input type="text" ref={rpcRef} className={className(nes.input)} value={`${window.location.protocol}//${window.location.host}/rpc`} readOnly={true}></input>
+                    <input type="text" ref={rpcRef} className={className(nes.input)} value={rpcUrl} readOnly={true}></input>
                     <button className={className(nes.button, nes.primary, styles.inlineCopyBtnRight)} onClick={() => { copyInputValue(rpcRef) }}>Copy</button>
                 </div>
             </div>

@@ -1,9 +1,17 @@
 #!/bin/sh
 
-chmod 600 /entrypoint.sh
+chmod 700 /entrypoint.sh
 
-echo -n $GZCTF_FLAG > /flag
+FLAG=${FLAG:-$GZCTF_FLAG}
+
+if [ -z "$FLAG" ]; then
+    echo "No flag provided. Use the placeholder flag."
+    FLAG="flag{this_is_a_placeholder_flag}"
+fi
+
+echo -n $FLAG > /flag
 chmod 400 /flag
+unset FLAG
 unset GZCTF_FLAG
 
 set -eu
