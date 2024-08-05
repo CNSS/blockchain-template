@@ -29,8 +29,8 @@ const NavBar = () => {
             <div className={styles.navElements}>
                 <span>
                     <h1>
-                        <i className={className("nes-icon", "is-medium", "coin", styles.title)}></i>
-                        Bl0ckch@in W3b Serv1c3
+                        <i className={className("nes-icon", "is-medium", "coin", styles.titleIcon)}></i>
+                        <span className={styles.titleText}>Bl0ckch@in W3b Serv1c3</span>
                     </h1>
                 </span>
                 <div>

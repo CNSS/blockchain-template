@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  chall:
+    build: .
+    container_name: chall
+    restart: always
+    environment:
+      - GZCTF_FLAG=CNSS{flag}
+    ports:
+      - "53000:3000"
