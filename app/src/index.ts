@@ -2,6 +2,7 @@ import express from 'express';
 import { Response } from 'express';
 import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
+import cors from 'cors';
 import { proxyHandler } from './proxy.js';
 import { deployChallenge, challenge } from './deploy.js';
 import { faucetHandler } from './faucet.js';
@@ -47,7 +48,9 @@ app.use((req, res, next) => {
         return next();
     }
 });
-app.post('/rpc', express.raw({ type: "*/*" }), proxyHandler);
+
+app.options('/rpc', cors());
+app.post('/rpc', cors(), express.raw({ type: "*/*" }), proxyHandler);
 
 app.use(express.json());
 app.use('/assets', express.static('ui/assets'));
