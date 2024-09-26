@@ -38,6 +38,8 @@ geth \
     --ws=false &
 '
 
+sleep 5
+
 su app -c '
 (cd /app && (node /app/dist/index.js&))
 '
